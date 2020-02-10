@@ -1,0 +1,35 @@
+on join:
+    if {bonus.%player%.giveloginbonus} is false:
+        set {bonus.%player%.time} to 0
+        message "ログインボーナスとして10分間の採掘速度上昇が付与されました。/useloginbonus [秒数]で使用できます" to all players
+        add 600 to {bonus.%player%.time}
+    set {bonus.%player%.giveloginbonus} to true
+
+command /useloginbonus <number>:
+    description: set time using haste
+    executable by: players
+    trigger:
+        set {_time} to {bonus.%player%.time} - arg-1
+        set {usingtime} to arg-1
+        if {_time} is more than 0:
+            remove arg-1 from {bonus.%player%.time}
+            execute console command "/effect give %player% minecraft:haste %{usingtime}%"
+            message "ログインボーナスを使用します" to player
+            set {usingtime} to 0
+        
+        if {_time} = 0:
+            message "使用可能時間を超過しています" to player
+
+        if {_time} is less than 0:
+            message "使用可能時間を超過しています" to player
+
+command /checklbstarus:
+    description: check the available time of login bonus
+    executable by: players
+    trigger:
+        message "ログインボーナスの使用可能時間はあと%{bonus.%player%.time}%秒です" to player
+
+Every 12 hours in "world":
+    Loop all players:
+        set {bonus.%loop-player%.giveloginbonus} to false
+        message "ログインボーナスの使用時間がリセットされました" to loop-player
