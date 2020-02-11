@@ -1,7 +1,7 @@
 on join:
     if {bonus.%player%.giveloginbonus} is false:
         set {bonus.%player%.time} to 0
-        message "ログインボーナスとして10分間の採掘速度上昇が付与されました。/useloginbonus [秒数]で使用できます" to all players
+        message "ログインボーナスとして10分間の採掘速度上昇が付与されました。/useloginbonus [秒数]で使用できます。残り時間は/checklbstatusで確認できます。" to all players
         add 600 to {bonus.%player%.time}
     set {bonus.%player%.giveloginbonus} to true
 
@@ -28,6 +28,14 @@ command /checklbstarus:
     executable by: players
     trigger:
         message "ログインボーナスの使用可能時間はあと%{bonus.%player%.time}%秒です" to player
+
+command /resetloginbonus <player>:
+    description: reset login bonus
+    permission: loginbonus.op
+    executable by: players
+    trigger:
+        set {bonus.%arg-1%.giveloginbonus} to false
+        message "ログインボーナスをリセットしました。使用可能時間はあと%{bonus.%arg-1%.time}%秒です" to player
 
 Every 12 hours in "world":
     Loop all players:
