@@ -35,9 +35,11 @@ command /resetloginbonus <player>:
     executable by: players
     trigger:
         set {bonus.%arg-1%.giveloginbonus} to false
+        set {bonus.%player%.time} to 0
+        add 600 to {bonus.%player%.time}
         message "ログインボーナスをリセットしました。使用可能時間はあと%{bonus.%arg-1%.time}%秒です" to player
 
-Every 12 hours in "world":
+at 07:00:
     Loop all players:
         set {bonus.%loop-player%.giveloginbonus} to false
         message "ログインボーナスの使用時間がリセットされました" to loop-player
